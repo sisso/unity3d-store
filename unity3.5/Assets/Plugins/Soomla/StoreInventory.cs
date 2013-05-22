@@ -57,6 +57,19 @@ namespace com.soomla.unity
 				IOS_ErrorCodes.CheckAndThrowException(err);
 #endif
 			}
+			
+#if UNITY_EDITOR 
+			var item = StoreInfo.GetPurchasableItemWithProductId(itemId) as PurchasableVirtualItem;
+				
+			if (UnityEngine.Random.value > 0.1) {
+				StoreUtils.LogDebug(TAG, "SOOMLA/UNITY Simulate purchase: " + itemId);
+				Events.OnMarketPurchaseStarted(item);
+				Events.OnMarketPurchase(item);
+			} else {
+				StoreUtils.LogDebug(TAG, "SOOMLA/UNITY Simulate failed purchase: " + itemId);
+				Events.OnMarketPurchaseStarted(item);
+			}
+#endif
 		}
 		
 		

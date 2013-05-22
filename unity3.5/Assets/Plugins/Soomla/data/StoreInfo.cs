@@ -43,12 +43,19 @@ namespace com.soomla.unity
 		[DllImport ("__Internal")]
 		private static extern void storeAssets_Init(int version, string storeAssetsJSON);
 #endif
+
+#if UNITY_EDITOR
+		private static IStoreAssets storeAssets;
+#endif
 		
 #if UNITY_ANDROID
 //		private static AndroidJavaClass jniStoreInfo = new AndroidJavaClass("com.soomla.unity.StoreInfo");
 #endif
 			
 		public static void Initialize(IStoreAssets storeAssets) {
+#if UNITY_EDITOR
+			StoreInfo.storeAssets = storeAssets;
+#endif
 			
 //			StoreUtils.LogDebug(TAG, "Adding currency");
 			JSONObject currencies = new JSONObject(JSONObject.Type.ARRAY);
@@ -291,7 +298,9 @@ namespace com.soomla.unity
 		public static List<VirtualCurrency> GetVirtualCurrencies() {
 			StoreUtils.LogDebug(TAG, "Trying to fetch currencies");
 			List<VirtualCurrency> vcs = new List<VirtualCurrency>();
-#if UNITY_ANDROID
+#if UNITY_EDITOR
+			vcs.AddRange(storeAssets.GetCurrencies());
+#elif UNITY_ANDROID
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaObject jniVirtualCurrencies = new AndroidJavaClass("com.soomla.unity.StoreInfo").CallStatic<AndroidJavaObject>("getCurrencies")) {
 				for(int i=0; i<jniVirtualCurrencies.Call<int>("size"); i++) {
@@ -323,7 +332,9 @@ namespace com.soomla.unity
 		public static List<VirtualGood> GetVirtualGoods() {
 			StoreUtils.LogDebug(TAG, "Trying to fetch goods");
 			List<VirtualGood> virtualGoods = new List<VirtualGood>();
-#if UNITY_ANDROID
+#if UNITY_EDITOR
+			virtualGoods.AddRange(storeAssets.GetGoods());
+#elif UNITY_ANDROID
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaObject jniVirtualGoods = new AndroidJavaClass("com.soomla.unity.StoreInfo").CallStatic<AndroidJavaObject>("getGoods")) {
 				for(int i=0; i<jniVirtualGoods.Call<int>("size"); i++) {
@@ -357,7 +368,9 @@ namespace com.soomla.unity
 		public static List<VirtualCurrencyPack> GetVirtualCurrencyPacks() {
 			StoreUtils.LogDebug(TAG, "Trying to fetch packs");
 			List<VirtualCurrencyPack> vcps = new List<VirtualCurrencyPack>();
-#if UNITY_ANDROID
+#if UNITY_EDITOR
+			vcps.AddRange(storeAssets.GetCurrencyPacks());
+#elif UNITY_ANDROID
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaObject jniVirtualCurrencyPacks = new AndroidJavaClass("com.soomla.unity.StoreInfo").CallStatic<AndroidJavaObject>("getCurrencyPacks")) {
 				for(int i=0; i<jniVirtualCurrencyPacks.Call<int>("size"); i++) {
@@ -389,7 +402,9 @@ namespace com.soomla.unity
 		public static List<NonConsumableItem> GetNonConsumableItems() {
 			StoreUtils.LogDebug(TAG, "Trying to fetch noncons");
 			List<NonConsumableItem> nonConsumableItems = new List<NonConsumableItem>();
-#if UNITY_ANDROID
+#if UNITY_EDITOR
+			nonConsumableItems.AddRange(storeAssets.GetNonConsumableItems());
+#elif UNITY_ANDROID
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaObject jniNonConsumableItems = new AndroidJavaClass("com.soomla.unity.StoreInfo").CallStatic<AndroidJavaObject>("getNonConsumableItems")) {
 				for(int i=0; i<jniNonConsumableItems.Call<int>("size"); i++) {
@@ -421,7 +436,9 @@ namespace com.soomla.unity
 		public static List<VirtualCategory> GetVirtualCategories() {
 			StoreUtils.LogDebug(TAG, "Trying to fetch categories");
 			List<VirtualCategory> virtualCategories = new List<VirtualCategory>();
-#if UNITY_ANDROID
+#if UNITY_EDITOR
+			virtualCategories.AddRange(storeAssets.GetCategories());
+#elif UNITY_ANDROID
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaObject jniVirtualCategories = new AndroidJavaClass("com.soomla.unity.StoreInfo").CallStatic<AndroidJavaObject>("getCategories")) {
 				for(int i=0; i<jniVirtualCategories.Call<int>("size"); i++) {

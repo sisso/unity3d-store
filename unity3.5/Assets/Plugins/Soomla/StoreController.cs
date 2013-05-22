@@ -84,6 +84,17 @@ namespace com.soomla.unity
 #elif UNITY_IOS
 			storeController_Init(Soomla.GetInstance().customSecret);
 #endif
+			
+#if UNITY_EDITOR
+			if (UnityEngine.Random.value < 0.1) {
+				// make billing ddisabled
+				StoreUtils.LogDebug(TAG, "SOOMLA/UNITY Simulate disabled billing");
+				Events.OnBillingNotSupported();
+			} else {
+				StoreUtils.LogDebug(TAG, "SOOMLA/UNITY Simulate enabled billing");
+				Events.OnBillingSupported();
+			}
+#endif
 		}
 		
 		
@@ -116,6 +127,9 @@ namespace com.soomla.unity
 				storeController_StoreOpening();
 #endif
 			}
+#if UNITIY_EDITOR
+			Events.OnOpeningStore();
+#endif
 		}
 		
 		public static void StoreClosing() {
@@ -128,6 +142,9 @@ namespace com.soomla.unity
 				storeController_StoreClosing();
 #endif
 			}
+#if UNITIY_EDITOR
+			Events.OnClosingStore();
+#endif
 		}
 		
 		public static void RestoreTransactions() {
