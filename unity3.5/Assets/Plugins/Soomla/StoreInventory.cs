@@ -68,6 +68,7 @@ namespace com.soomla.unity
 			} else {
 				StoreUtils.LogDebug(TAG, "SOOMLA/UNITY Simulate failed purchase: " + itemId);
 				Events.OnMarketPurchaseStarted(item);
+				Events.OnMarketPurchaseCancelled(item);
 			}
 #endif
 		}
