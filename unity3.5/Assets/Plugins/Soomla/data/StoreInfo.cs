@@ -160,7 +160,12 @@ namespace com.soomla.unity
 		}
 		
 		public static PurchasableVirtualItem GetPurchasableItemWithProductId(string productId) {
-#if UNITY_ANDROID
+#if UNITY_EDITOR
+			foreach(var i in GetVirtualCurrencyPacks()) {
+				if (i.ItemId == productId) return i;
+			}
+			return null;
+#elif UNITY_ANDROID
 			VirtualItem vi = null;
 			AndroidJNI.PushLocalFrame(100);
 			using(AndroidJavaObject jniVirtualItem = AndroidJNIHandler.CallStatic<AndroidJavaObject>(
