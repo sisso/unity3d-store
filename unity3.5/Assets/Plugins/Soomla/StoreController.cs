@@ -127,7 +127,7 @@ namespace com.soomla.unity
 				storeController_StoreOpening();
 #endif
 			}
-#if UNITIY_EDITOR
+#if UNITY_EDITOR
 			Events.OnOpeningStore();
 #endif
 		}
@@ -142,7 +142,7 @@ namespace com.soomla.unity
 				storeController_StoreClosing();
 #endif
 			}
-#if UNITIY_EDITOR
+#if UNITY_EDITOR
 			Events.OnClosingStore();
 #endif
 		}
